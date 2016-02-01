@@ -1,0 +1,115 @@
+package application;
+
+/**
+ * Classe représentant un tronçon (une partie d'une rue reliant deux noeuds)
+ * 
+ * @author H4102
+ *
+ */
+public class Troncon {
+	/**
+	 * nom de la rue a laquelle appartient le tronçon
+	 */
+	private String nomRue;
+	/**
+	 * vitesse (en m/s) à laquel on se déplace en moyenne
+	 */
+	private double vitesse;
+	/**
+	 * longeur du tronçon en mètres
+	 */
+	private double longueur;
+
+	/**
+	 * noeud depart du tronçon
+	 */
+	private Noeud depart;
+	/**
+	 * noeud destination du tronçon
+	 */
+	private Noeud destination;
+
+	/**
+	 * construit un tronçon et ajoute au noeud depart celui-ci comme tronçon
+	 * sortant
+	 * 
+	 * @param nomRue
+	 *            nom de la rue a laquelle appartient le tronçon
+	 * @param vitesse
+	 *            vitesse (en m/s) à laquel on se déplace en moyenne
+	 * @param longueur
+	 *            longeur du tronçon en mètres
+	 * @param depart
+	 *            noeud depart du tronçon
+	 * @param destination
+	 *            noeud destination du tronçon
+	 */
+	public Troncon(String nomRue, double vitesse, double longueur,
+			Noeud depart, Noeud destination) {
+		super();
+		this.nomRue = nomRue;
+		this.vitesse = vitesse;
+		this.longueur = longueur;
+		this.depart = depart;
+		this.destination = destination;
+
+		this.depart.getListeTronconSortants().add(this);
+	}
+
+	/**
+	 * 
+	 * @return nom de la rue a laquelle appartient le tronçon
+	 */
+	public String getNomRue() {
+		return nomRue;
+	}
+
+	/**
+	 * 
+	 * @return vitesse (en m/s) à laquel on se déplace en moyenne
+	 */
+	public double getVitesse() {
+		return vitesse;
+	}
+
+	/**
+	 * 
+	 * @return longueur longeur du tronçon en mètres
+	 */
+	public double getLongueur() {
+		return longueur;
+	}
+
+	/**
+	 * 
+	 * @return noeud depart du tronçon
+	 */
+	public Noeud getDepart() {
+		return depart;
+	}
+
+	/**
+	 * 
+	 * @return noeud destination du tronçon
+	 */
+	public Noeud getDestination() {
+		return destination;
+	}
+
+	/**
+	 * 
+	 * @return le temps qu'on met en seconde pour parcourir le tronçon
+	 *         (longeur/vitesse)
+	 */
+	public double getCout() {
+		return getLongueur() / getVitesse();
+	}
+
+	@Override
+	public String toString() {
+		return "Troncon [nomRue=" + nomRue + ", vitesse=" + vitesse
+				+ ", longueur=" + longueur + ", Duree=" + longueur / vitesse
+				+ ", depart=" + depart + ", destination=" + destination + "]";
+	}
+
+}

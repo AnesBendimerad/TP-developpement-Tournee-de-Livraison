@@ -1,0 +1,22 @@
+package application;
+
+import java.util.ArrayList;
+
+public class Zone {
+	private String nomFichier;
+	private ArrayList<Noeud> listeNoeuds;
+	private ArrayList<Troncon> listeTroncons;
+	
+	public String getNomFichier() {
+		return nomFichier;
+	}
+	public ArrayList<Noeud> getListeNoeuds() {
+		return listeNoeuds;
+	}
+	public ArrayList<Troncon> getListeTroncons() {
+		return listeTroncons;
+	}
+	
+	
+
+}

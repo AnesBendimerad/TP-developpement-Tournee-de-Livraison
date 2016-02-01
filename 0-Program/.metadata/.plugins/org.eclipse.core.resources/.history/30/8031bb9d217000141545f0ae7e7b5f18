@@ -1,0 +1,25 @@
+package application;
+
+public class Parametres {
+	/**
+	 * Le temps moyen que fait le livreur pour effectuer une livraison, ce temps
+	 * est traduit par le temps d'arrêt de livreur au point de livraison.
+	 */
+	public static int TempsMoyenLivraison = 600;
+
+	/**
+	 * l'Heure de depart du livreur de l'entrepôt si null : Le système calcule
+	 * automatiquement l'heure de départ qui est l'heure permettant au livreur
+	 * d'arriver à la première livraison à faire à l'heure de début de la plage
+	 * horaire de cette dernière.
+	 * 
+	 */
+	public static Temps HeureDepart = null;
+
+	/**
+	 * représente le temps maximal que le superviseur peut attendre avant que le
+	 * système affiche l'itinéraire
+	 */
+	public static int TempsMaxCalcul = 20;
+
+}

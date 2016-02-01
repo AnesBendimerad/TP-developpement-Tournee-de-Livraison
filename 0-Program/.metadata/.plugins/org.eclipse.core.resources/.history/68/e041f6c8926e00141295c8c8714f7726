@@ -1,0 +1,40 @@
+
+import java.util.*;
+
+/**
+ * 
+ */
+public class Livraison {
+
+    /**
+     * 
+     */
+    public Livraison() {
+    }
+
+    /**
+     * 
+     */
+    private int idLivraision;
+
+    /**
+     * 
+     */
+    private String heureArrive;
+
+    /**
+     * 
+     */
+    private String heureDepart;
+
+    /**
+     * 
+     */
+    private Noeud noeudLivraison;
+
+    /**
+     * 
+     */
+    private PlageHoraire[] plageHoraire;
+
+}

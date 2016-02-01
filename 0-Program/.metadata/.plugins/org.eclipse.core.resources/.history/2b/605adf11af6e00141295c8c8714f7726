@@ -1,0 +1,195 @@
+package application;
+
+import java.util.ArrayList;
+
+import tsp.Graph;
+
+/**
+ * 
+ */
+public class GraphLivraison implements Graph {
+
+	private FeuilleDeRoute feuilleDeRoute;
+	private Chemin[][] matriceChemin;
+	private ArrayList<Noeud> tableCorrespondanceNoeud;
+
+	/**
+     * 
+     */
+
+	/**
+     * 
+     */
+	
+	
+	public FeuilleDeRoute getFeuilleDeRoute() {
+		return feuilleDeRoute;
+	}
+
+	public Chemin[][] getMatriceChemin() {
+		return matriceChemin;
+	}
+
+	private Noeud getNoeudDeOrdre(int id) {
+		return tableCorrespondanceNoeud.get(id);
+	}
+
+	private int getOrdreDeNoeud(Noeud noeud) {
+		for (int r = 0; r < tableCorrespondanceNoeud.size(); r++) {
+			if (noeud == tableCorrespondanceNoeud.get(r))
+				return r;
+		}
+		// introuvable
+		return -1;
+	}
+
+	
+	public GraphLivraison(FeuilleDeRoute feuilleDeRoute) {
+		this.feuilleDeRoute = feuilleDeRoute;
+
+		// premier parcour : construction de la table de correspondance indice
+		// -- idNoeud
+		tableCorrespondanceNoeud=new ArrayList<>();
+		
+		tableCorrespondanceNoeud.add(this.feuilleDeRoute.getEntrepot());
+		for (PlageHoraire plage : this.feuilleDeRoute.getListePlagesHoraire()) {
+			for (Livraison livraison : plage.getListeLivraisons()) {
+				tableCorrespondanceNoeud.add(livraison.getNoeudLivraison());
+			}
+		}
+		// ------------------------------------------------------------------------------
+
+		int nombrePoints = feuilleDeRoute.getNombreLivraisons() + 1;
+		matriceChemin = new Chemin[nombrePoints][nombrePoints];
+
+		// ---Chemin : Entrepot -> Première plage horaire
+
+		Noeud noeudDepart = feuilleDeRoute.getEntrepot();
+		Noeud noeudDestination;
+		for (Livraison livraison : feuilleDeRoute.getListePlagesHoraire()
+				.get(0).getListeLivraisons()) {
+			noeudDestination = livraison.getNoeudLivraison();
+			Chemin chemin = CalculManager.Djikstra(
+					this.feuilleDeRoute.getZone(), noeudDepart.getId(),
+					noeudDestination.getId());
+			matriceChemin[0][getOrdreDeNoeud(noeudDestination)] = chemin;
+		}
+		// ----Chemin : A l'interieur de de la plage et plage suivante
+		for (int k = 0; k < feuilleDeRoute.getListePlagesHoraire().size(); k++) {
+			for (Livraison livraison : feuilleDeRoute.getListePlagesHoraire()
+					.get(k).getListeLivraisons()) {
+				noeudDepart = livraison.getNoeudLivraison();
+				// A l'interieur
+				for (Livraison livraisonDest : feuilleDeRoute
+						.getListePlagesHoraire().get(k).getListeLivraisons()) {
+					if (livraisonDest != livraison) {
+						noeudDestination = livraisonDest.getNoeudLivraison();
+						Chemin chemin = CalculManager.Djikstra(
+								this.feuilleDeRoute.getZone(),
+								noeudDepart.getId(), noeudDestination.getId());
+						matriceChemin[getOrdreDeNoeud(noeudDepart)][getOrdreDeNoeud(noeudDestination)] = chemin;
+					}
+				}
+
+				if (k < feuilleDeRoute.getListePlagesHoraire().size() - 1) {
+					// A la plage suivante
+					for (Livraison livraisonDest : feuilleDeRoute
+							.getListePlagesHoraire().get(k + 1)
+							.getListeLivraisons()) {
+						noeudDestination = livraisonDest.getNoeudLivraison();
+						Chemin chemin = CalculManager.Djikstra(
+								this.feuilleDeRoute.getZone(),
+								noeudDepart.getId(), noeudDestination.getId());
+						matriceChemin[getOrdreDeNoeud(noeudDepart)][getOrdreDeNoeud(noeudDestination)] = chemin;
+					}
+				} else {
+					// A l'entrepot
+					noeudDestination = feuilleDeRoute.getEntrepot();
+					Chemin chemin = CalculManager.Djikstra(
+							this.feuilleDeRoute.getZone(), noeudDepart.getId(),
+							noeudDestination.getId());
+					matriceChemin[getOrdreDeNoeud(noeudDepart)][getOrdreDeNoeud(noeudDestination)] = chemin;
+
+				}
+			}
+		}
+
+	}
+
+	/**
+     * 
+     */
+
+	@Override
+	public int getMaxArcCost() {
+		int maxCout=-1;
+		for (int i=0;i<getNbVertices();i++) {
+			for (int j=0;j<getNbVertices();j++) {
+				if (matriceChemin[i][j]!=null && maxCout<matriceChemin[i][j].getCout()) {
+					maxCout=(int) Math.ceil(matriceChemin[i][j].getCout());
+				}
+			}
+		}
+		return maxCout;
+	}
+
+	@Override
+	public int getMinArcCost() {
+		int minCout=Integer.MAX_VALUE;
+		for (int i=0;i<getNbVertices();i++) {
+			for (int j=0;j<getNbVertices();j++) {
+				if (matriceChemin[i][j]!=null && minCout>matriceChemin[i][j].getCout()) {
+					minCout=(int) Math.ceil(matriceChemin[i][j].getCout());
+				}
+			}
+		}
+		return minCout;
+	}
+
+	@Override
+	public int getNbVertices() {
+		return feuilleDeRoute.getNombreLivraisons() + 1;
+	}
+
+	@Override
+	public int[][] getCost() {
+		int nb=getNbVertices();
+		int costs[][] = new int[nb][nb];
+		for (int i=0;i<nb;i++) {
+			for (int j=0;j<nb;j++) {
+				if (matriceChemin[i][j]!=null) {
+					costs[i][j]=(int) Math.ceil(matriceChemin[i][j].getCout());
+				} else {
+					costs[i][j]=Integer.MAX_VALUE;
+				}
+			}
+		}
+		
+		return costs;
+	}
+
+	@Override
+	public int[] getSucc(int i) throws ArrayIndexOutOfBoundsException {
+		ArrayList<Integer> L=new ArrayList<>();
+		for (int j=0;j<getNbVertices();j++) {
+			if (matriceChemin[i][j] != null) {
+				L.add(j);
+			}
+		}
+		
+		int succ[]= new int[L.size()];
+		for (int j=0;j<L.size();j++) {
+			succ[j]=L.get(j);
+		}
+		
+		
+		return null;
+	}
+
+	@Override
+	public int getNbSucc(int i) throws ArrayIndexOutOfBoundsException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

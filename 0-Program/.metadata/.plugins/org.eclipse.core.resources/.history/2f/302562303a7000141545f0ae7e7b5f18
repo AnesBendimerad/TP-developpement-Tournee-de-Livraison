@@ -1,0 +1,87 @@
+package application;
+/**
+ * Classe représentant un tronçon (une partie d'une rue reliant deux noeuds)
+ * @author H4102
+ *
+ */
+public class Troncon {
+	/**
+	 * nom de la rue a laquelle appartient le tronçon
+	 */
+	private String nomRue;
+	/**
+	 * vitesse (en m/s) à laquel on se déplace en moyenne 
+	 */
+	private double vitesse;
+	/**
+	 * longeur du tronçon en mètres
+	 */
+	private double longueur;
+	
+	/**
+	 * noeud depart du tronçon
+	 */
+	private Noeud depart;
+	/**
+	 * noeud destination du tronçon
+	 */
+	private Noeud destination;
+	
+	/**
+	 * construit un tronçon et ajoute au noeud depart celui-ci comme tronçon sortant
+	 * @param nomRue nom de la rue a laquelle appartient le tronçon
+	 * @param vitesse vitesse (en m/s) à laquel on se déplace en moyenne
+	 * @param longueur longeur du tronçon en mètres
+	 * @param depart noeud depart du tronçon
+	 * @param destination noeud destination du tronçon
+	 */
+	public Troncon(String nomRue, double vitesse, double longueur,
+			Noeud depart, Noeud destination) {
+		super();
+		this.nomRue = nomRue;
+		this.vitesse = vitesse;
+		this.longueur = longueur;
+		this.depart = depart;
+		this.destination = destination;
+		
+		this.depart.getListeTronconSortants().add(this);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getNomRue() {
+		return nomRue;
+	}
+	public double getVitesse() {
+		return vitesse;
+	}
+	public double getLongueur() {
+		return longueur;
+	}
+	public Noeud getDepart() {
+		return depart;
+	}
+	public Noeud getDestination() {
+		return destination;
+	}
+	
+	//retourne la duree de traverse
+	public double getCout() {
+		return getLongueur()/getVitesse();
+	}
+
+
+	@Override
+	public String toString() {
+		return "Troncon [nomRue=" + nomRue + ", vitesse=" + vitesse
+				+ ", longueur=" + longueur + ", Duree=" + longueur/vitesse + ", depart=" + depart
+				+ ", destination=" + destination + "]";
+	}
+
+
+	
+	
+	
+}

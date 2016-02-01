@@ -1,0 +1,8 @@
+package application;
+
+public class Troncon {
+	String nomRue;
+	double vitesse;
+	double longueur;
+	
+}

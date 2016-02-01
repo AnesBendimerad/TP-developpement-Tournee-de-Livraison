@@ -1,0 +1,38 @@
+package application;
+import java.util.*;
+
+/**
+ * 
+ */
+public class FeuilleDeRoute {
+
+    /**
+     * 
+     */
+    public FeuilleDeRoute() {
+    }
+
+    /**
+     * 
+     */
+    private Set<PlageHoraire> listePlagesHoraire;
+
+    /**
+     * 
+     */
+    private Zone[] zone;
+
+    /**
+     * 
+     */
+    private Set<Chemin> itineraire;
+
+    
+    /**
+     * 
+     */
+    public void calculerItineraire() {
+        // TODO implement here
+    }
+
+}

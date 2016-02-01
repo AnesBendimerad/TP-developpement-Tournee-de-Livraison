@@ -1,0 +1,49 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Zone {
+	private String nomFichier;
+	private HashMap<Integer, Noeud> Noeuds ;
+	
+	private ArrayList<Troncon> listeTroncons;
+	
+	
+	
+	
+	public Zone(String nomFichier) {
+		super();
+		this.nomFichier = nomFichier;
+		Noeuds=new HashMap<>();
+		listeTroncons=new ArrayList<>();
+	}
+	
+	
+	public HashMap<Integer, Noeud> getNoeuds() {
+		return Noeuds;
+	}
+	
+	
+	public void addNoeud(Noeud noeud) {
+		Noeuds.put(noeud.getId(),noeud);
+	}
+	
+	public void addAllNoeud(ArrayList<Noeud> noeuds) {
+		for (Noeud noeud : noeuds) {
+			addNoeud(noeud);
+		}
+	}
+
+
+	public String getNomFichier() {
+		return nomFichier;
+	}
+	
+	public ArrayList<Troncon> getListeTroncons() {
+		return listeTroncons;
+	}
+	
+	
+
+}

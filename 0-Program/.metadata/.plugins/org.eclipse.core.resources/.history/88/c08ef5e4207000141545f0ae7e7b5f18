@@ -1,0 +1,16 @@
+package application;
+
+public class Parametres {
+	/**
+	 * Le temps moyen que fait le livreur pour effectuer une livraison, ce temps
+	 * est traduit par le temps d'arrêt de livreur au point de livraison.
+	 */
+	public static int TempsMoyenLivraison = 600;
+	
+	/**
+	 * 
+	 */
+	public static Temps HeureDepart = null;
+	public static int TempsMaxCalcul = 20;
+
+}

@@ -1,0 +1,9 @@
+package application;
+
+public class noeud {
+	int id;
+	int x;
+	int y;
+	Troncon sortant;
+
+}

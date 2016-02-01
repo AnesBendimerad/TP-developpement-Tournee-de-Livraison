@@ -1,0 +1,47 @@
+package tsp;
+
+/**
+ * @author Christine Solnon
+ *
+ */
+public interface Graph {
+
+	/**
+	 * @return the maximal cost of an arc of <b>this</b>
+	 */
+	public abstract int getMaxArcCost();
+
+	/**
+	 * @return the minimal cost of an arc of <b>this</b>
+	 */
+	public abstract int getMinArcCost();
+
+	/**
+	 * @return the number of vertices of <b>this</b>
+	 */
+	public abstract int getNbVertices();
+
+	/**
+	 * @return the <b>cost</b> matrix of <b>this</b>: for all vertices <b>i</b> and <b>j</b>,
+	 * if <b>(i,j)</b> is an arc of <b>this</b>, then <b>cost[i][j]</b> = cost of <b>(i,j)</b>, 
+	 * otherwise <b>cost[i][j] = this.getMaxArcCost()+1</b>
+	 */
+	public abstract int[][] getCost();
+
+	/**
+	 * @param i a vertex such that <b>0 <= i < this.getNbVertices()</b>
+	 * @return an array containing all successor vertices of <b>i</b> in <code>this</code>
+	 * @throws ArrayIndexOutOfBoundsException If <b>i<0</b> or <b>i>=this.getNbVertices()</b>
+	 */
+	public abstract int[] getSucc(int i)
+			throws ArrayIndexOutOfBoundsException;
+
+	/**
+	 * @param i a vertex such that <b> 0 "<=" i "<" this.getNbVertices() </b>
+	 * @return the number of successor vertices of <b>i</b> in <b>this</b>
+	 * @throws ArrayIndexOutOfBoundsException If <b>i<0</b> or <b>i>=this.getNbVertices()</b>
+	 */
+	public abstract int getNbSucc(int i)
+			throws ArrayIndexOutOfBoundsException;
+
+}

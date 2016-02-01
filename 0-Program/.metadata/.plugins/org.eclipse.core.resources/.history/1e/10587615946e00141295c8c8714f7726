@@ -1,0 +1,39 @@
+package application;
+
+import java.util.ArrayList;
+
+/**
+ * 
+ */
+public class FeuilleDeRoute {
+
+    /**
+     * 
+     */
+    public FeuilleDeRoute() {
+    }
+
+    /**
+     * 
+     */
+    private ArrayList<PlageHoraire> listePlagesHoraire;
+
+    /**
+     * 
+     */
+    private Zone[] zone;
+
+    /**
+     * 
+     */
+    private ArrayList<Chemin> itineraire;
+
+    
+    /**
+     * 
+     */
+    public void calculerItineraire() {
+        // TODO implement here
+    }
+
+}

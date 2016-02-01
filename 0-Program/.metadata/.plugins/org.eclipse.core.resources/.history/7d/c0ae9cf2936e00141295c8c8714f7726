@@ -1,0 +1,49 @@
+package application;
+
+import java.util.*;
+
+/**
+ * 
+ */
+public class Livraison {
+
+    /**
+     * 
+     */
+    
+    /**
+     * 
+     */
+    private int idLivraision;
+
+    public Livraison(int idLivraision, String heureArrive, String heureDepart,
+			Noeud noeudLivraison, PlageHoraire plageHoraire) {
+		super();
+		this.idLivraision = idLivraision;
+		this.heureArrive = heureArrive;
+		this.heureDepart = heureDepart;
+		this.noeudLivraison = noeudLivraison;
+		this.plageHoraire = plageHoraire;
+	}
+
+	/**
+     * 
+     */
+    private String heureArrive;
+
+    /**
+     * 
+     */
+    private String heureDepart;
+
+    /**
+     * 
+     */
+    private Noeud noeudLivraison;
+
+    /**
+     * 
+     */
+    private PlageHoraire plageHoraire;
+
+}

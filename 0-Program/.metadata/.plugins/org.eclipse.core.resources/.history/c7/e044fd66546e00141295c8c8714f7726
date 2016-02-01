@@ -1,0 +1,13 @@
+package application;
+
+import java.util.ArrayList;
+
+public class noeud {
+	int id;
+	int x;
+	int y;
+	ArrayList<Troncon> listeTronconSortants;
+	
+	
+
+}

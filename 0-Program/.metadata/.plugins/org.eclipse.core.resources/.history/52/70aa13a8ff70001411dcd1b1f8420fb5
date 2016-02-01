@@ -1,0 +1,34 @@
+package application;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+public class GraphLivraisonTest {
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
+
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@Test
+	public void testInitMatriceChemin() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetSucc() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetNbSucc() {
+		fail("Not yet implemented");
+	}
+
+}

@@ -1,0 +1,23 @@
+package application;
+
+public class Temps {
+	int heure;
+	int minute;
+	int seconde;
+	public Temps(int heure, int minute, int seconde) {
+		super();
+		this.heure = heure;
+		this.minute = minute;
+		this.seconde = seconde;
+	}
+	// format de l'heure heure:minute:seconde
+	public Temps(String stringHeure) {
+		super();
+		this.heure = stringHeure.substring(0, arg1);
+		this.minute = minute;
+		this.seconde = seconde;
+	}
+	
+	
+
+}

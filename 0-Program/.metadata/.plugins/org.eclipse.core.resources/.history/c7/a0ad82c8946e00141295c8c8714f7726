@@ -1,0 +1,69 @@
+package application;
+
+import java.util.ArrayList;
+
+/**
+ * 
+ */
+public class FeuilleDeRoute {
+
+	/**
+     * 
+     */
+    private Zone zone;
+
+    
+    /**
+     * 
+     */
+    private ArrayList<PlageHoraire> listePlagesHoraire;
+
+    
+    /**
+     * 
+     */
+    private ArrayList<Chemin> itineraire;
+
+    
+    
+    /**
+     * 
+     */
+    public FeuilleDeRoute(Zone zone, ArrayList<PlageHoraire> listePlagesHoraire) {
+		super();
+		this.zone = zone;
+		this.setListePlagesHoraire(new ArrayList<>());
+		this.itineraire = new ArrayList<>();
+	}
+    
+    
+    
+    public Zone getZone() {
+		return zone;
+	}
+
+
+
+	public ArrayList<PlageHoraire> getListePlagesHoraire() {
+		return listePlagesHoraire;
+	}
+
+
+
+	public ArrayList<Chemin> getItineraire() {
+		return itineraire;
+	}
+
+
+
+	/**
+     * 
+     */
+    public void calculerItineraire() {
+        // TODO implement here
+    }
+
+	
+
+
+}

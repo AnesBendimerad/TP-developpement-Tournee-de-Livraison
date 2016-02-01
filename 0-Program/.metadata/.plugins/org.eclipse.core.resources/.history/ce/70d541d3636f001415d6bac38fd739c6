@@ -1,0 +1,19 @@
+package application;
+
+public class Entrepot {
+	private Noeud noeud;
+	/**
+     * 
+     */
+	private Temps heureArrive;
+
+	/**
+     * 
+     */
+	private Temps heureDepart;
+
+	/**
+     * 
+     */
+
+}

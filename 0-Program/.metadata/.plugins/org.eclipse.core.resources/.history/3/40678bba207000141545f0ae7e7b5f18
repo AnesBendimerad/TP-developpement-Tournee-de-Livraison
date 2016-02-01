@@ -1,0 +1,9 @@
+package application;
+
+public class Parametres {
+	public static int TempsMoyenLivraison=600;
+	public static Temps HeureDepart=null;
+	public static int TempsMaxCalcul=600;
+	
+
+}

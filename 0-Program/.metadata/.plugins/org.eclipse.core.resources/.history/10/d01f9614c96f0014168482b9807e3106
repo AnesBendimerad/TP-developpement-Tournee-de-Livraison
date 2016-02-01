@@ -1,0 +1,67 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+public class CalculManager {
+	// ------------------------------------------------------
+	public static Chemin Djikstra(Zone zone, int depart, int destination) {
+		Noeud noeudDepart = zone.getNoeuds().get(depart);
+
+		ArrayList<Integer> marque = new ArrayList<>();
+		HashMap<Integer, Double> labels = new HashMap<>();
+		HashMap<Integer, Chemin> chemins = new HashMap<>();
+
+		labels.put(depart, (double) 0);
+
+		while (!marque.contains(destination)) {
+			int idNoeudMarque = -1; // Noeud à Marque
+			double min = Double.MAX_VALUE;
+			for (Entry<Integer, Double> E : labels.entrySet()) {
+				if (!marque.contains(E.getKey())) {
+					if (E.getValue() <= min) {
+						idNoeudMarque = E.getKey();
+						min = E.getValue();
+					}
+				}
+			}
+			marque.add(idNoeudMarque);
+			Noeud noeudMarque = zone.getNoeuds().get(idNoeudMarque);
+
+			for (Troncon troncon : noeudMarque.getListeTronconSortants()) {
+				double cout;
+				Noeud nouedSucc = troncon.getDestination();
+				int succ = nouedSucc.getId();
+
+				if (labels.containsKey(succ)) {
+					cout = labels.get(succ);
+				} else {
+					cout = Double.MAX_VALUE;
+				}
+
+				if (labels.get(idNoeudMarque) + troncon.getCout() <= cout) {
+					cout = labels.get(idNoeudMarque) + troncon.getCout();
+					labels.put(succ, cout);
+
+					if (chemins.containsKey(idNoeudMarque)) {
+						Chemin chemin = new Chemin(noeudDepart, nouedSucc, cout);
+
+						ArrayList<Troncon> clone = (ArrayList<Troncon>) (chemins.get(idNoeudMarque).getListeTroncon().clone());
+						chemin.setListeTroncon(clone);
+						chemin.getListeTroncon().add(troncon);
+
+						chemins.put(succ, chemin);
+					} else {
+						Chemin chemin = new Chemin(noeudDepart, nouedSucc, cout);
+						chemin.getListeTroncon().add(troncon);
+
+						chemins.put(succ, chemin);
+					}
+				}
+			}
+
+		}
+		return chemins.get(destination);
+	}
+}

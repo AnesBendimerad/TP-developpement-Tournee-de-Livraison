@@ -1,0 +1,6 @@
+package application;
+
+public class Parametres {
+	public static TempsMoyenLivraison=600;
+
+}

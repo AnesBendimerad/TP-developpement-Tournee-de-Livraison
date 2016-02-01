@@ -1,0 +1,20 @@
+command=C\:\\Program Files (x86)\\Java\\jdk1.8.0_11\\bin\\javadoc.exe
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="application.Troncon"><rhs name\="application.Troncon"/></lhs><lhs name\="application.Zone"><rhs name\="application.Zone"/></lhs><lhs name\="application.Chemin"><rhs name\="application.Chemin"/></lhs><lhs name\="application.FeuilleDeRoute"><rhs name\="application.FeuilleDeRoute"/></lhs><lhs name\="application.Livraison"><rhs name\="application.Livraison"/></lhs><lhs name\="java.util.List"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.RandomAccess"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.lang.Cloneable"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.Collection"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.lang.Iterable"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.AbstractList"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.AbstractCollection"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="java.util.ArrayList"><rhs name\="java.util.ArrayList"/></lhs><lhs name\="application.Noeud"><rhs name\="application.Noeud"/></lhs><lhs name\="application.PlageHoraire"><rhs name\="application.PlageHoraire"/></lhs><lhs name\="application.Temps"><rhs name\="application.Temps"/></lhs><lhs name\="tsp.Graph"><rhs name\="application.GraphLivraison"/></lhs><lhs name\="application.GraphLivraison"><rhs name\="application.GraphLivraison"/></lhs></history>
+content_assist_number_of_computers=15
+content_assist_proposals_background=255,255,255
+content_assist_proposals_foreground=0,0,0
+eclipse.preferences.version=1
+fontPropagated=true
+org.eclipse.jdt.ui.editor.tab.width=
+org.eclipse.jdt.ui.formatterprofiles.version=12
+org.eclipse.jdt.ui.javadoclocations.migrated=true
+org.eclipse.jdt.ui.text.code_templates_migrated=true
+org.eclipse.jdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+org.eclipse.jdt.ui.text.custom_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+org.eclipse.jdt.ui.text.templates_migrated=true
+org.eclipse.jface.textfont=1|Consolas|10.0|0|WINDOWS|1|0|0|0|0|0|0|0|0|1|0|0|0|0|Consolas;
+proposalOrderMigrated=true
+spelling_locale_initialized=true
+tabWidthPropagated=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

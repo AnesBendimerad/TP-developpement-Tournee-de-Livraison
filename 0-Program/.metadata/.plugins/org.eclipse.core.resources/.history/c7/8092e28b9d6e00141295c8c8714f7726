@@ -1,0 +1,86 @@
+package application;
+
+/**
+ * 
+ */
+public class Livraison {
+
+    
+    /**
+     * 
+     */
+    private int idLivraision;
+
+	/**
+     * 
+     */
+    private Temps heureArrive;
+
+    /**
+     * 
+     */
+    private Temps heureDepart;
+
+    /**
+     * 
+     */
+    private Noeud noeudLivraison;
+
+    /**
+     * 
+     */
+    private PlageHoraire plageHoraire;
+    
+    /**
+     * 
+     */
+    public Livraison(int idLivraision, Temps  heureArrive,
+			Noeud noeudLivraison, PlageHoraire plageHoraire) {
+		super();
+		this.idLivraision = idLivraision;
+		this.heureArrive = heureArrive;
+		this.noeudLivraison = noeudLivraison;
+		this.plageHoraire = plageHoraire;
+		
+		this.heureDepart = heureArrive;
+		if (this.heureDepart.getTempsValue()<plageHoraire.getHeureDebut().getTempsValue()) {
+			this.heureDepart=getHeureDebut();
+		}
+		
+	}
+
+	public Temps getHeureArrive() {
+		return heureArrive;
+	}
+
+	public void setHeureArrive(Temps heureArrive) {
+		this.heureArrive = heureArrive;
+	}
+
+	public Temps getHeureDepart() {
+		return heureDepart;
+	}
+
+	public void setHeureDepart(Temps heureDepart) {
+		this.heureDepart = heureDepart;
+	}
+
+	public PlageHoraire getPlageHoraire() {
+		return plageHoraire;
+	}
+
+	public void setPlageHoraire(PlageHoraire plageHoraire) {
+		this.plageHoraire = plageHoraire;
+	}
+
+	public int getIdLivraision() {
+		return idLivraision;
+	}
+
+	public Noeud getNoeudLivraison() {
+		return noeudLivraison;
+	}
+    
+    
+
+}

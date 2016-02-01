@@ -1,0 +1,30 @@
+
+
+
+/**
+ * 
+ */
+public class PlageHoraire {
+
+    /**
+     * 
+     */
+    public PlageHoraire() {
+    }
+
+    /**
+     * 
+     */
+    private String heureDebut;
+
+    /**
+     * 
+     */
+    private String heureFin;
+
+    /**
+     * 
+     */
+    private ArrayList<Livraison> listeLivraisons;
+
+}

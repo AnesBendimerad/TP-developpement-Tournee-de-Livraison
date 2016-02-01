@@ -1,0 +1,25 @@
+package application;
+
+public class Entrepot {
+	private Noeud noeud;
+	/**
+     * 
+     */
+	private Temps heureDepart=null;
+
+	/**
+     * 
+     */
+	private Temps heureArrive=null;
+
+	public Entrepot(Noeud noeud) {
+		super();
+		this.noeud = noeud;
+	}
+	/**
+     * 
+     */
+	
+	
+
+}

@@ -1,0 +1,489 @@
+package application;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import tsp.SolutionState;
+import tsp.TSP;
+
+/**
+ * classe représentant une feuille de route (elle représente une demande de
+ * livraison avant le calcul d'un itinéraire)
+ * 
+ * @author H4102
+ *
+ */
+public class FeuilleDeRoute {
+
+	/**
+	 * zone associé à la feuille de route (à la demande de livraison)
+	 */
+	private Zone zone;
+
+	/**
+	 * entrepot associé à la feuille de route (à la demande de livraison)
+	 */
+	private Entrepot entrepot;
+
+	/**
+	 * liste des plages horaires de la demande de livraison
+	 */
+	private ArrayList<PlageHoraire> listePlagesHoraire;
+
+	/**
+	 * itinéraire qui est une liste de chemin constituant un circuit (de/à
+	 * l'entrepôt)
+	 */
+	private ArrayList<Chemin> itineraire;
+
+	/**
+	 * construit une demande de livraison
+	 * 
+	 * @param zone
+	 *            zone associé à la demande de livraison
+	 * @param idEntrepot
+	 *            identifiant du noeud de l'entrepôt associé à la demande de
+	 *            livraison
+	 * @param listePlagesHoraire
+	 *            liste des plages horaires de la demande de livraison
+	 */
+	public FeuilleDeRoute(Zone zone, int idEntrepot,
+			ArrayList<PlageHoraire> listePlagesHoraire) {
+		super();
+		this.zone = zone;
+		this.listePlagesHoraire = listePlagesHoraire;
+		this.entrepot = new Entrepot(zone.getNoeuds().get(idEntrepot));
+		this.itineraire = null;
+	}
+
+	/**
+	 * 
+	 * @return zone associé à la feuille de route (à la demande de livraison)
+	 */
+	public Zone getZone() {
+		return zone;
+	}
+
+	/**
+	 * 
+	 * @return liste des plages horaires de la demande de livraison
+	 */
+	public ArrayList<PlageHoraire> getListePlagesHoraire() {
+		return listePlagesHoraire;
+	}
+
+	/**
+	 * 
+	 * @return itinéraire qui est une liste de chemin constituant un circuit
+	 *         (de/à l'entrepôt)
+	 */
+	public ArrayList<Chemin> getItineraire() {
+		return itineraire;
+	}
+
+	/**
+	 * 
+	 * @return entrepot associé à la feuille de route (à la demande de
+	 *         livraison)
+	 */
+	public Entrepot getEntrepot() {
+		return entrepot;
+	}
+
+	/**
+	 * 
+	 * @return nombre de livraisons associè à la feuille de route (à la demande
+	 *         de livraison)
+	 */
+	public int getNombreLivraisons() {
+		int S = 0;
+		for (PlageHoraire plageHoraire : listePlagesHoraire) {
+			S += plageHoraire.getNombreLivraisons();
+		}
+		return S;
+	}
+
+	/**
+	 * 
+	 * @param noeud
+	 *            noeud
+	 * @return la livraison prévu pour ce noeud (un noeud peut être associé à
+	 *         une seule livraison au max), retourne null dans le cas ou aucune
+	 *         livraison dans cette plage correspond au noeud
+	 */
+	public Livraison getLivraisonDeNoeud(Noeud noeud) {
+		Livraison tmp = null;
+		for (PlageHoraire plageHoraire : listePlagesHoraire) {
+			tmp = plageHoraire.getLivraisonDeNoeud(noeud);
+			if (tmp != null)
+				return tmp;
+		}
+		return null;
+	}
+
+	/**
+	 * calcul l'itinéraire
+	 * 
+	 * @return l'état de la solution trouvée
+	 * @see tsp.SolutionState
+	 */
+	public SolutionState calculerItineraire() {
+		itineraire = new ArrayList<>();
+		GraphLivraison graphLivraison = new GraphLivraison(this);
+		graphLivraison.initMatriceChemin();
+
+		TSP tsp = new TSP(graphLivraison);
+
+		tsp.solve(Parametres.TempsMaxCalcul * 1000,
+				graphLivraison.getNbVertices() * graphLivraison.getMaxArcCost()
+						+ 1);
+		if (tsp.getSolutionState() != SolutionState.INCONSISTENT) {
+			int[] next = tsp.getNext();
+
+			int k = 0;
+			int i = next[k];
+			Chemin chemin = graphLivraison.getMatriceChemin()[k][i];
+			itineraire.add(chemin);
+			while (i != k) {
+				// System.out.println(i+"-->"+next[i]);
+				chemin = graphLivraison.getMatriceChemin()[i][next[i]];
+				itineraire.add(chemin);
+				i = next[i];
+			}
+			majTemps();
+		}
+		return tsp.getSolutionState();
+	}
+
+	/**
+	 * 
+	 * @return une chaine de caractère résumant l'itinéraire (pour l'édition)
+	 */
+	public String getStringItiniraire() {
+		String string = "";
+		string = string.concat("Itiniraire : \r\n");
+		string = string.concat("-------------\r\n");
+		Chemin chemin = itineraire.get(0);
+		string = string.concat("Depart de l'entrepot : "
+				+ getEntrepot().toString() + "\r\n");
+
+		for (int i = 0; i < itineraire.size() - 1; i++) {
+			chemin = itineraire.get(i);
+			string = string.concat("\tChemin à suivre : " + "\r\n");
+			string = string.concat(chemin.toString() + "\r\n");
+			string = string.concat("\r\n");
+			string = string.concat("Livraison à faire : "
+					+ getLivraisonDeNoeud(chemin.getDestination()) + "\r\n");
+		}
+
+		chemin = itineraire.get(itineraire.size() - 1);
+		string = string.concat("\tChemin à suivre : " + "\r\n");
+		string = string.concat(chemin.toString() + "\r\n");
+		string = string.concat("\r\n");
+		string = string.concat("Arrivée à l'entrepot : "
+				+ getEntrepot().toString() + "\r\n");
+		return string;
+	}
+
+	/**
+	 * construit le chemin le plus court dans la zone reliant entre le noeud
+	 * depart et le noeud destination (en utilisant l'algorithme de Dijkstra)
+	 * 
+	 * @param depart
+	 *            neoud depart du chemin
+	 * @param destination
+	 *            noeud destination du chemin
+	 * @return le plus court chemin reliant depart à destination
+	 */
+	public Chemin Djikstra(Noeud depart, Noeud destination) {
+
+		ArrayList<Integer> marque = new ArrayList<>();
+		HashMap<Integer, Double> labels = new HashMap<>();
+		HashMap<Integer, Chemin> chemins = new HashMap<>();
+
+		labels.put(depart.getId(), (double) 0);
+
+		while (!marque.contains(destination.getId())) {
+			int idNoeudMarque = -1; // Noeud à Marque
+			double min = Double.MAX_VALUE;
+			for (Entry<Integer, Double> E : labels.entrySet()) {
+				if (!marque.contains(E.getKey())) {
+					if (E.getValue() <= min) {
+						idNoeudMarque = E.getKey();
+						min = E.getValue();
+					}
+				}
+			}
+			marque.add(idNoeudMarque);
+			Noeud noeudMarque = zone.getNoeuds().get(idNoeudMarque);
+
+			for (Troncon troncon : noeudMarque.getListeTronconSortants()) {
+				double cout;
+				Noeud nouedSucc = troncon.getDestination();
+				int succ = nouedSucc.getId();
+
+				if (labels.containsKey(succ)) {
+					cout = labels.get(succ);
+				} else {
+					cout = Double.MAX_VALUE;
+				}
+
+				if (labels.get(idNoeudMarque) + troncon.getCout() <= cout) {
+					cout = labels.get(idNoeudMarque) + troncon.getCout();
+					labels.put(succ, cout);
+
+					if (chemins.containsKey(idNoeudMarque)) {
+						Chemin chemin = new Chemin(depart, nouedSucc, cout);
+
+						ArrayList<Troncon> clone = new ArrayList<>();
+						for (Troncon t : chemins.get(idNoeudMarque)
+								.getListeTroncon()) {
+							clone.add(t);
+						}
+
+						chemin.setListeTroncons(clone);
+						chemin.getListeTroncon().add(troncon);
+
+						chemins.put(succ, chemin);
+					} else {
+						Chemin chemin = new Chemin(depart, nouedSucc, cout);
+						chemin.getListeTroncon().add(troncon);
+
+						chemins.put(succ, chemin);
+					}
+				}
+			}
+
+		}
+		return chemins.get(destination.getId());
+	}
+
+	/**
+	 * 
+	 * @param noeudDepart
+	 *            noeud depart
+	 * @return le rang du chemin ayant comme noeud de départ noeudDepart dans
+	 *         l'itinéraire, retourne -1 dans le cas ou un tel chemin n'existe
+	 *         pas
+	 */
+	int getOrdreCheminDeNoeudDepart(Noeud noeudDepart) {
+		for (int i = 0; i < getItineraire().size(); i++) {
+			Chemin chemin = getItineraire().get(i);
+			if (chemin.getDepart() == noeudDepart)
+				return i;
+		}
+		return -1;
+	}
+
+	/**
+	 * 
+	 * @param noeud
+	 *            noeud
+	 * @return retourne true dans le cas ou le noeud en question est associé à
+	 *         une livraison ou un entrepôt, false sinon.
+	 */
+	private boolean verifierNoeud(Noeud noeud) {
+		if (this.getEntrepot().getNoeud() == noeud)
+			return true;
+		for (PlageHoraire plageHoraire : this.getListePlagesHoraire()) {
+			for (Livraison livraison : plageHoraire.getListeLivraisons()) {
+				if (livraison.getNoeudLivraison() == noeud)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * met à jour l'itinéraire après suppression du noeud
+	 * 
+	 * @param noeud
+	 *            noeud qu'on désire supprimé
+	 * @return false dans le cas ou le noeud ne représente pas une livraison
+	 */
+	public boolean majItineraireSupressionLivraison(Noeud noeud) {
+		Livraison livraison = this.getLivraisonDeNoeud(noeud);
+		if (livraison == null)
+			return false;
+
+		int ordre = getOrdreCheminDeNoeudDepart(noeud);
+
+		Noeud nDepart = this.getItineraire().get(ordre - 1).getDepart();
+		Noeud nDestination = this.getItineraire().get(ordre).getDestination();
+
+		Chemin chemin = Djikstra(nDepart, nDestination);
+
+		getItineraire().remove(ordre - 1);
+		getItineraire().remove(ordre - 1);
+		getItineraire().add(ordre - 1, chemin);
+
+		majTemps();
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param avant
+	 *            noeud précédant la nouvelle livraison
+	 * @param noeud
+	 *            noeud représentant la nouvelle livraison à créer
+	 * @return false dans le cas ou le noeud avant ne représente pas un entrepôt
+	 *         ou une livraison ou dans le cas ou le noeud choisi est déja
+	 *         associé à une livraison ou à l'entrepôt
+	 */
+	public boolean majItineraireAjoutLivraison(Noeud avant, Noeud noeud) {
+		if (!verifierNoeud(avant) || verifierNoeud(noeud))
+			return false;
+		// don't forget the ID ==> max in plageHoraire + 1
+		Livraison livraison = new Livraison(0, noeud);
+		Chemin chemin1 = Djikstra(avant, noeud);
+		int ordre = getOrdreCheminDeNoeudDepart(avant);
+		Noeud noeudSuivant = getItineraire().get(ordre).getDestination();
+		Chemin chemin2 = Djikstra(noeud, noeudSuivant);
+
+		getItineraire().remove(ordre);
+		getItineraire().add(ordre, chemin2);
+		getItineraire().add(ordre, chemin1);
+
+		majTemps(livraison);
+		return true;
+
+	}
+
+	/**
+	 * met à jour les temps de passage (de l'entrepôt et de l'ensemble des
+	 * livraison)
+	 */
+	void majTemps() {
+		if (Parametres.HeureDepart == null) {
+			Chemin cheminInitial = getItineraire().get(0);
+			Temps tempsDepart = getLivraisonDeNoeud(
+					cheminInitial.getDestination()).getPlageHoraire()
+					.getHeureDebut().copy();
+			tempsDepart
+					.subTempsSeconde((int) Math.ceil(cheminInitial.getCout()));
+			entrepot.setHeureDepart(tempsDepart);
+		} else {
+			entrepot.setHeureDepart(Parametres.HeureDepart.copy());
+		}
+
+		Temps actuel = new Temps(entrepot.getHeureDepart().toString());
+		for (int i = 0; i < getItineraire().size(); i++) {
+
+			Chemin chemin = getItineraire().get(i);
+			Livraison l = this.getLivraisonDeNoeud(chemin.getDestination());
+			if (l != null) {
+				Temps heureArrive = actuel.copy();
+				heureArrive.addTempsSeconde((int) Math.ceil(chemin.getCout()));
+				l.setHeureArrive(heureArrive);
+				actuel = l.getHeureDepart().copy();
+			} else {
+				Temps heureArrive = actuel.copy();
+				heureArrive.addTempsSeconde((int) Math.ceil(chemin.getCout()));
+				entrepot.setHeureArrive(heureArrive);
+
+			}
+		}
+	}
+
+	/**
+	 * met à jour les temps de passage (de l'entrepôt et de l'ensemble des
+	 * livraison) dans le cas ou on ajoute une nouvelle livraison, trouve aussi
+	 * la plage associé a cette livraison qui représente l'une des plage déja
+	 * existante contenant le temps d'arrivée de cette livraison, dans le cas où
+	 * aucune plage ne correspond à cette livraison, on place la livraison dans
+	 * la dernière plage, et la livraison est considérée comme non faite à temps
+	 * 
+	 * @param livraison
+	 *            nouvelle livraison
+	 */
+	void majTemps(Livraison livraison) {
+		if (Parametres.HeureDepart == null) {
+
+			Chemin cheminInitial = getItineraire().get(0);
+			Livraison l = getLivraisonDeNoeud(cheminInitial.getDestination());
+			Temps tempsDepart = null;
+			if (l!=null) {
+				tempsDepart = l.getPlageHoraire().getHeureDebut().copy();
+			} else {
+				PlageHoraire plageHoraire = this.getListePlagesHoraire().get(0);
+				plageHoraire.addLivraison(livraison);
+				livraison.setIdLivraision(plageHoraire.getNombreLivraisons());
+				livraison.setHeureArrive(heureArrive);
+			}
+			tempsDepart
+					.subTempsSeconde((int) Math.ceil(cheminInitial.getCout()));
+			entrepot.setHeureDepart(tempsDepart);
+		} else {
+			entrepot.setHeureDepart(Parametres.HeureDepart.copy());
+		}
+		Temps actuel = new Temps(entrepot.getHeureDepart().toString());
+		for (int i = 0; i < getItineraire().size(); i++) {
+
+			Chemin chemin = getItineraire().get(i);
+			Livraison l = this.getLivraisonDeNoeud(chemin.getDestination());
+			if (l != null) {
+				Temps heureArrive = actuel.copy();
+				heureArrive.addTempsSeconde((int) Math.ceil(chemin.getCout()));
+				l.setHeureArrive(heureArrive);
+				actuel = l.getHeureDepart().copy();
+			} else if (chemin.getDestination() == getEntrepot().getNoeud()) {
+				Temps heureArrive = actuel.copy();
+				heureArrive.addTempsSeconde((int) Math.ceil(chemin.getCout()));
+				entrepot.setHeureArrive(heureArrive);
+
+			} else {
+				Temps heureArrive = actuel.copy();
+				heureArrive.addTempsSeconde((int) Math.ceil(chemin.getCout()));
+				PlageHoraire plageHoraire = getPlageHoraireLivraison(heureArrive);
+				plageHoraire.addLivraison(livraison);
+				livraison.setIdLivraision(plageHoraire.getNombreLivraisons());
+				livraison.setHeureArrive(heureArrive);
+				actuel = livraison.getHeureDepart().copy();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param temps
+	 *            temps
+	 * @return la plage horaire contenant le temps, si aucune plage ne contient
+	 *         ce temps elle renvoie la dernière plage
+	 */
+	private PlageHoraire getPlageHoraireLivraison(Temps temps) {
+		for (PlageHoraire plageHoraire : getListePlagesHoraire()) {
+			if (plageHoraire.getHeureFin().getTempsValue() >= temps
+					.getTempsValue())
+				return plageHoraire;
+		}
+		return getListePlagesHoraire().get(getListePlagesHoraire().size() - 1);
+	}
+
+	/**
+	 * edite la feuille de route dans le fichier de chemin path
+	 * 
+	 * @param path
+	 *            le chemin du fichier
+	 * @return false dans le cas d'erreur
+	 */
+	public boolean editerFeuilleDeRoute(String path) {
+		FileWriter fw;
+		try {
+			fw = new FileWriter(path, false);
+			BufferedWriter output = new BufferedWriter(fw);
+			System.out.println(getStringItiniraire());
+			output.write(getStringItiniraire());
+			output.flush();
+			output.close();
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
+
+}

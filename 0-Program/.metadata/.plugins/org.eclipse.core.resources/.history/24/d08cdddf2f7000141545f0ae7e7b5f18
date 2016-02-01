@@ -1,0 +1,77 @@
+package application;
+
+import java.util.ArrayList;
+
+/**
+ * Le chemin est identifié par le noeud de départ, le noeud d'arrivée, le cout
+ * (le temps nécessaire en seconde pour le parcourir) et la liste des tronçons
+ * le composant
+ * 
+ * @author H4102
+ *
+ */
+public class Chemin {
+	private Noeud depart;
+	private Noeud destination;
+	private double cout;
+	private ArrayList<Troncon> listeTroncons;
+
+	/**
+	 * Construit un chemin avec le noeud de depart, d'arrivé et le cout en temps (en seconde),
+	 * la liste des tronçon est initialement vide (finalisée par Djikstra)   
+	 * @param depart : noeud de départ du chemin
+	 * @param destination : noeud destination du chemin
+	 * @param cout : durée nécessaire pour parcourir le chemin (en seconde)
+	 */
+	public Chemin(Noeud depart, Noeud destination, double cout) {
+		super();
+		this.depart = depart;
+		this.destination = destination;
+		this.listeTroncons = new ArrayList<>();
+		this.cout = cout;
+	}
+
+	/**
+	 * 
+	 * @return noeud depart
+	 */
+	public Noeud getDepart() {
+		return depart;
+	}
+
+	/**
+	 * 
+	 * @return noeud destination
+	 */
+	public Noeud getDestination() {
+		return destination;
+	}
+
+	public double getCout() {
+		return cout;
+	}
+
+	public void setCout(double cout) {
+		this.cout = cout;
+	}
+
+	public ArrayList<Troncon> getListeTroncon() {
+		return listeTroncons;
+	}
+
+	public void setListeTroncon(ArrayList<Troncon> listeTroncon) {
+		this.listeTroncons = listeTroncon;
+	}
+
+	@Override
+	public String toString() {
+		String S = "Chemin [depart=" + depart + ", destination=" + destination
+				+ ", Duree=" + Math.ceil(cout) + "]\r\n";
+		for (Troncon troncon : this.getListeTroncon()) {
+			S += "\t\t" + troncon.toString() + "\r\n";
+		}
+		return S;
+
+	}
+
+}

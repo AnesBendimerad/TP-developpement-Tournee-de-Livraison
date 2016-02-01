@@ -1,0 +1,110 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Interface commande : une commande peut être executée ou inexecutée (retour) 
+ * @author H4102
+ *
+ */
+interface Command {
+	boolean execute();
+	boolean unexecute();
+}
+
+/**
+ * 
+ * @author H4102 
+ *
+ */
+class AjoutLivraisonCommand implements Command {
+
+	FeuilleDeRoute feuilleDeRoute;
+	Noeud avant;
+	Noeud noeud;
+
+	public AjoutLivraisonCommand(FeuilleDeRoute feuilleDeRoute, Noeud avant,
+			Noeud noeud) {
+		super();
+		this.feuilleDeRoute = feuilleDeRoute;
+		this.avant = avant;
+		this.noeud = noeud;
+	}
+
+	@Override
+	public boolean execute() {
+		return feuilleDeRoute.majItineraireAjoutLivraison(avant, noeud);
+	}
+
+	@Override
+	public boolean unexecute() {
+		return feuilleDeRoute.majItineraireSupressionLivraison(noeud);
+	}
+}
+
+class SuppressionLivraisonCommand implements Command {
+
+	FeuilleDeRoute feuilleDeRoute;
+	Noeud noeud;
+	Noeud avant = null;
+
+	public SuppressionLivraisonCommand(FeuilleDeRoute feuilleDeRoute,
+			Noeud avant, Noeud noeud) {
+		super();
+		this.feuilleDeRoute = feuilleDeRoute;
+		this.noeud = noeud;
+	}
+
+	@Override
+	public boolean execute() {
+		int ordre = feuilleDeRoute.getOrdreCheminDeNoeudDepart(noeud);
+		avant = feuilleDeRoute.getItineraire().get(ordre - 1).getDepart();
+		return feuilleDeRoute.majItineraireSupressionLivraison(noeud);
+	}
+
+	@Override
+	public boolean unexecute() {
+		return feuilleDeRoute.majItineraireAjoutLivraison(avant, noeud);
+	}
+}
+
+public class Modificator {
+	private List<Command> history = new ArrayList<Command>();
+	private int actuel = -1;
+
+	public Modificator() {
+	}
+
+	public boolean storeAndExecute(Command cmd) {
+		int l=actuel+1;
+		while (l<history.size()) {
+			history.remove(l);
+		}
+		
+		if (cmd.execute()) {
+			this.history.add(cmd);
+			actuel+=1;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean undo() {
+		if (actuel==-1) return false;
+		this.history.get(actuel).unexecute();
+		actuel--;
+		return true;
+	}
+
+	public boolean redo() {
+		if (actuel==history.size()-1) return false;
+		actuel++;
+		this.history.get(actuel).execute();
+		return true;
+	}
+	
+	public int historySize() {
+		return history.size();
+	}
+}

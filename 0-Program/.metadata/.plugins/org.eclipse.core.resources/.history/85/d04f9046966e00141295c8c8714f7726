@@ -1,0 +1,8 @@
+package application;
+
+public class Temps {
+	int heure;
+	int minute;
+	int seconde;
+
+}

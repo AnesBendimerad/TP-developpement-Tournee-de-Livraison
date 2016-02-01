@@ -1,0 +1,25 @@
+
+import java.util.*;
+
+/**
+ * 
+ */
+public class LivraisonManager {
+
+    /**
+     * 
+     */
+    public LivraisonManager() {
+    }
+
+    /**
+     * @param nomFichier 
+     * @param Zone 
+     * @return
+     */
+    public FeuilleDeRoute chargerLivraisons(void nomFichier, void Zone) {
+        // TODO implement here
+        return null;
+    }
+
+}

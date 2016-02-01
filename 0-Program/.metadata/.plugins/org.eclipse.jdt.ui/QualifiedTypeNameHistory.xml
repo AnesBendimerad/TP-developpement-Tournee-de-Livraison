@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="tsp.Graph"/>
+<fullyQualifiedTypeName name="application.Troncon"/>
+<fullyQualifiedTypeName name="application.Zone"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="application.Chemin"/>
+<fullyQualifiedTypeName name="application.CalculManager"/>
+<fullyQualifiedTypeName name="application.Noeud"/>
+<fullyQualifiedTypeName name="application.PlageHoraire"/>
+<fullyQualifiedTypeName name="tsp.TSP"/>
+<fullyQualifiedTypeName name="application.Temps"/>
+<fullyQualifiedTypeName name="java.util.Map.Entry"/>
+<fullyQualifiedTypeName name="application.Livraison"/>
+<fullyQualifiedTypeName name="application.FeuilleDeRoute"/>
+<fullyQualifiedTypeName name="application.PlanManager"/>
+<fullyQualifiedTypeName name="application.LivraisonManager"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="application.Parametres"/>
+<fullyQualifiedTypeName name="java.io.FileWriter"/>
+<fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+<fullyQualifiedTypeName name="java.util.Deque"/>
+<fullyQualifiedTypeName name="java.util.ArrayDeque"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="application.AjoutLivraisonCommand"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="application.GraphLivraison"/>
+</qualifiedTypeNameHistroy>

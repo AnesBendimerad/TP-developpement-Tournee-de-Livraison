@@ -1,0 +1,40 @@
+package application;
+import java.util.ArrayList;
+
+
+
+
+/**
+ * 
+ */
+public class PlageHoraire {
+
+    /**
+     * 
+     */
+    private String heureDebut;
+
+    /**
+     * 
+     */
+    private String heureFin;
+
+    /**
+     * 
+     */
+    private ArrayList<Livraison> listeLivraisons;
+
+	public PlageHoraire(String heureDebut, String heureFin,
+			ArrayList<Livraison> listeLivraisons) {
+		super();
+		this.heureDebut = heureDebut;
+		this.heureFin = heureFin;
+		this.listeLivraisons = listeLivraisons;
+	}
+    
+    /**
+     * 
+     */
+    
+
+}

@@ -1,0 +1,8 @@
+package application;
+
+public class noeud {
+	int x;
+	int y;
+	
+
+}

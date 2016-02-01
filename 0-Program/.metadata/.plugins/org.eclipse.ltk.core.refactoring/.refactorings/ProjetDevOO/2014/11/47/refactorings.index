@@ -1,0 +1,9 @@
+1416227048599	Rename type 'noeud'
+1416227140380	Encapsulate field 'id'
+1416227145580	Encapsulate field 'x'
+1416227150123	Encapsulate field 'y'
+1416247105656	Extract local variable 'clone'
+1416254557924	Encapsulate field 'listePlagesHoraire'
+1416387763749	Delete element
+1416437459430	Rename type 'Main2'
+1416518041177	Delete element

@@ -1,0 +1,30 @@
+
+import java.util.*;
+
+/**
+ * 
+ */
+public class PlageHoraire {
+
+    /**
+     * 
+     */
+    public PlageHoraire() {
+    }
+
+    /**
+     * 
+     */
+    private String heureDebut;
+
+    /**
+     * 
+     */
+    private String heureFin;
+
+    /**
+     * 
+     */
+    private Set<Livraison> listeLivraisons;
+
+}

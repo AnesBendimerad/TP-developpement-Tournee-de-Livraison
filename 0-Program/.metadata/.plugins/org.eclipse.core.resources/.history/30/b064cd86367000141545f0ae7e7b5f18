@@ -1,0 +1,108 @@
+package application;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+/**
+ * 
+ */
+public class LivraisonManager {
+
+	/**
+	 * @param nomFichier
+	 *            nom du fichier XML source
+	 * @param Zone
+	 *            zone de la demande de livraison
+	 * @return feuille de route
+	 */
+	public static FeuilleDeRoute chargerLivraisons(String nomFichier, Zone zone) {
+		File xml = new File(nomFichier);
+
+		if (xml != null) {
+			try {
+				// creation d'un constructeur de documents a l'aide d'une
+				// fabrique
+				DocumentBuilder constructeur = DocumentBuilderFactory
+						.newInstance().newDocumentBuilder();
+				// lecture du contenu d'un fichier XML avec DOM
+				Document document = constructeur.parse(xml);
+				Element racine = document.getDocumentElement();
+				if (racine.getNodeName().equals("JourneeType")) {
+					ArrayList<PlageHoraire> plagesHorairesListe = new ArrayList<PlageHoraire>();
+					String tag = "Entrepot";
+					NodeList eliste = racine.getElementsByTagName(tag);
+					Element entrepot = (Element) eliste.item(0);
+					int adresseEntrepot = Integer.parseInt(entrepot
+							.getAttribute("adresse"));
+
+					tag = "PlagesHoraires";
+					NodeList phliste = racine.getElementsByTagName(tag);
+
+					tag = "Plage";
+					Element plagesHoraires = (Element) phliste.item(0);
+					NodeList pliste = plagesHoraires.getElementsByTagName(tag);
+					for (int i = 0; i < pliste.getLength(); i++) {
+
+						Element plage = (Element) pliste.item(i);
+
+						Temps heureDebut = new Temps(
+								plage.getAttribute("heureDebut"));
+						Temps heureFin = new Temps(
+								plage.getAttribute("heureFin"));
+
+						PlageHoraire plageHoraire = new PlageHoraire(
+								heureDebut, heureFin);
+
+						tag = "Livraisons";
+						NodeList lsliste = plage.getElementsByTagName(tag);
+						Element livraisons = (Element) lsliste.item(0);
+						tag = "Livraison";
+						NodeList lliste = livraisons.getElementsByTagName(tag);
+
+						for (int j = 0; j < lliste.getLength(); j++) {
+							Element livraison = (Element) lliste.item(j);
+							int id = Integer.parseInt(livraison
+									.getAttribute("id"));
+							int adresse = Integer.parseInt(livraison
+									.getAttribute("adresse"));
+							HashMap<Integer, Noeud> noeuds = zone.getNoeuds();
+							Noeud noeudLivraison = noeuds.get(adresse);
+							Livraison livr = new Livraison(id, noeudLivraison);
+							plageHoraire.addLivraison(livr);
+
+						}
+
+						plagesHorairesListe.add(plageHoraire);
+					}
+					FeuilleDeRoute fDR = new FeuilleDeRoute(zone,
+							adresseEntrepot, plagesHorairesListe);
+
+					return fDR;
+				}
+				// todo : traiter les erreurs
+			} catch (ParserConfigurationException pce) {
+				System.out.println("Erreur de configuration du parseur DOM");
+				System.out
+						.println("lors de l'appel a fabrique.newDocumentBuilder();");
+			} catch (SAXException se) {
+				System.out.println("Erreur lors du parsing du document");
+				System.out.println("lors de l'appel a construteur.parse(xml)");
+			} catch (IOException ioe) {
+				System.out.println("Erreur d'entree/sortie");
+				System.out.println("lors de l'appel a construteur.parse(xml)");
+			}
+
+		}
+		return null;
+
+	}
+}

@@ -1,0 +1,21 @@
+package application;
+
+public class Troncon {
+	String nomRue;
+	double vitesse;
+	double longueur;
+	
+	Noeud depart;
+	Noeud destination;
+	public Troncon(String nomRue, double vitesse, double longueur,
+			Noeud depart, Noeud destination) {
+		super();
+		this.nomRue = nomRue;
+		this.vitesse = vitesse;
+		this.longueur = longueur;
+		this.depart = depart;
+		this.destination = destination;
+	}
+	
+	
+}

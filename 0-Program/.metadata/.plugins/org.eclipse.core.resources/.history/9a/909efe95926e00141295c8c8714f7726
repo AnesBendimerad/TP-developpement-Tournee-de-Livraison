@@ -1,0 +1,37 @@
+package application;
+
+/**
+ * 
+ */
+public class FeuilleDeRoute {
+
+    /**
+     * 
+     */
+    public FeuilleDeRoute() {
+    }
+
+    /**
+     * 
+     */
+    private ArrayList<PlageHoraire> listePlagesHoraire;
+
+    /**
+     * 
+     */
+    private Zone[] zone;
+
+    /**
+     * 
+     */
+    private Set<Chemin> itineraire;
+
+    
+    /**
+     * 
+     */
+    public void calculerItineraire() {
+        // TODO implement here
+    }
+
+}

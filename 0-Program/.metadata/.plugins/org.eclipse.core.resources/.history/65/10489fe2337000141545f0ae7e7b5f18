@@ -1,0 +1,244 @@
+package application;
+
+import java.util.ArrayList;
+
+import tsp.Graph;
+
+// ----Remarque Importante -------------------------
+// Jusque là les couts (en temps) été en secondes à partir de maintenant
+// le cout sera la valeur entière au dessus du cout initial
+// exemple cout = 2.33333 ====> cout (en entier) = 3 secondes
+/**
+ * classe représentant le graph de livraisons qui sera utilisé par TSP </br>
+ * <b>Remarque : </b> les couts des chemins
+ * 
+ * @author H4102
+ *
+ */
+public class GraphLivraison implements Graph {
+
+	/**
+	 * Feuille de route associée au graph
+	 */
+	private FeuilleDeRoute feuilleDeRoute;
+	/**
+	 * Matrice contenant l'ensemble des chemins possibles entres les différents
+	 * noeuds (livraisons/entrepôt) </br> <b>matrice[i][j]</b> représente le
+	 * chemin entre le noeud d'ordre i et le noeud d'ordre j (la correspondance
+	 * entre noeud et ordre est faite via la table de correspondance) <br/>
+	 * <b>Remarque 1: </b> il exsiste un chemin entre i et j si et seulement si
+	 * la livraison qui correspond au noeud d'ordre i appartient à la plage
+	 * horaire de la livraison correspondant au noeud d'ordre j, ou à la plage
+	 * qui le prècède directement </br> <b>Remarque 2: </b> le noeud d'ordre 0
+	 * correspond à l'entrepôt </br><b>Remarque 3: </b> le noeud d'ordre 0 est
+	 * reliée à tout les noeuds coressponants a des livraisons appartenant à la
+	 * prmière plage horaire. Les noeuds de la dernière plage horaire sont
+	 * reliée au noeud d'ordre 0
+	 */
+	private Chemin[][] matriceChemin;
+
+	/**
+	 * Table de correspondance qui pour chaque entier (de 0 à n) affecte
+	 * l'identifiant du noeud correspondant
+	 */
+	private ArrayList<Noeud> tableCorrespondanceNoeud;
+
+	/**
+	 * 
+	 * @return La feuille de route associée au graph
+	 */
+	public FeuilleDeRoute getFeuilleDeRoute() {
+		return feuilleDeRoute;
+	}
+
+	/**
+	 * 
+	 * @return La matrice contenant l'ensemble des chemins possibles entres les
+	 *         différents noeuds (livraisons/entrepôt)
+	 */
+	public Chemin[][] getMatriceChemin() {
+		return matriceChemin;
+	}
+
+	/**
+	 * 
+	 * @param noeud
+	 * @return l'identifaint du noeud dans la matrice des chemins
+	 */
+	private int getOrdreDeNoeud(Noeud noeud) {
+		for (int r = 0; r < tableCorrespondanceNoeud.size(); r++) {
+			if (noeud == tableCorrespondanceNoeud.get(r))
+				return r;
+		}
+		// introuvable
+		return -1;
+	}
+
+	
+	public GraphLivraison(FeuilleDeRoute feuilleDeRoute) {
+		this.feuilleDeRoute = feuilleDeRoute;
+
+		// premier parcour : construction de la table de correspondance indice
+		// -- idNoeud
+		tableCorrespondanceNoeud = new ArrayList<>();
+
+		tableCorrespondanceNoeud.add(this.feuilleDeRoute.getEntrepot()
+				.getNoeud());
+		for (PlageHoraire plage : this.feuilleDeRoute.getListePlagesHoraire()) {
+			for (Livraison livraison : plage.getListeLivraisons()) {
+				tableCorrespondanceNoeud.add(livraison.getNoeudLivraison());
+			}
+		}
+		// ------------------------------------------------------------------------------
+	}
+
+	public void initMatriceChemin() {
+		int nombrePoints = feuilleDeRoute.getNombreLivraisons() + 1;
+		matriceChemin = new Chemin[nombrePoints][nombrePoints];
+		ArrayList<Noeud[]> couplesNoeuds = getCouplesNoeuds();
+		// ---Chemin : Entrepot -> Première plage horaire
+		for (Noeud[] coupleNoeud : couplesNoeuds) {
+			// System.out.println("("+coupleNoeud[0]+","+coupleNoeud[1]+")");
+			Chemin chemin = feuilleDeRoute.Djikstra(coupleNoeud[0],
+					coupleNoeud[1]);
+			// System.out.println(chemin);
+			// System.out.println();
+			matriceChemin[getOrdreDeNoeud(coupleNoeud[0])][getOrdreDeNoeud(coupleNoeud[1])] = chemin;
+		}
+	}
+
+	// renvoie la liste des couple noeuds (des chemins possibles)
+	private ArrayList<Noeud[]> getCouplesNoeuds() {
+
+		ArrayList<Noeud[]> couplesNoeuds = new ArrayList<>();
+
+		Noeud noeudDepart = feuilleDeRoute.getEntrepot().getNoeud();
+		Noeud noeudDestination;
+		for (Livraison livraison : feuilleDeRoute.getListePlagesHoraire()
+				.get(0).getListeLivraisons()) {
+			noeudDestination = livraison.getNoeudLivraison();
+			Noeud coupleNoeuds[] = { noeudDepart, noeudDestination };
+			couplesNoeuds.add(coupleNoeuds);
+		}
+
+		for (int k = 0; k < feuilleDeRoute.getListePlagesHoraire().size(); k++) {
+			for (Livraison livraison : feuilleDeRoute.getListePlagesHoraire()
+					.get(k).getListeLivraisons()) {
+				noeudDepart = livraison.getNoeudLivraison();
+				// A l'interieur
+				for (Livraison livraisonDest : feuilleDeRoute
+						.getListePlagesHoraire().get(k).getListeLivraisons()) {
+					if (livraisonDest != livraison) {
+						noeudDestination = livraisonDest.getNoeudLivraison();
+						Noeud coupleNoeuds[] = { noeudDepart, noeudDestination };
+						couplesNoeuds.add(coupleNoeuds);
+					}
+				}
+
+				if (k < feuilleDeRoute.getListePlagesHoraire().size() - 1) {
+					// A la plage suivante
+					for (Livraison livraisonDest : feuilleDeRoute
+							.getListePlagesHoraire().get(k + 1)
+							.getListeLivraisons()) {
+						noeudDestination = livraisonDest.getNoeudLivraison();
+						Noeud coupleNoeuds[] = { noeudDepart, noeudDestination };
+						couplesNoeuds.add(coupleNoeuds);
+
+					}
+				} else {
+					// A l'entrepot
+					noeudDestination = feuilleDeRoute.getEntrepot().getNoeud();
+					Noeud coupleNoeuds[] = { noeudDepart, noeudDestination };
+					couplesNoeuds.add(coupleNoeuds);
+
+				}
+			}
+		}
+
+		return couplesNoeuds;
+	}
+
+	/**
+     * 
+     */
+
+	@Override
+	public int getMaxArcCost() {
+		int maxCout = -1;
+		for (int i = 0; i < getNbVertices(); i++) {
+			for (int j = 0; j < getNbVertices(); j++) {
+				if (matriceChemin[i][j] != null
+						&& maxCout < matriceChemin[i][j].getCout()) {
+					maxCout = (int) Math.ceil(matriceChemin[i][j].getCout());
+				}
+			}
+		}
+		return maxCout;
+	}
+
+	@Override
+	public int getMinArcCost() {
+		int minCout = Integer.MAX_VALUE;
+		for (int i = 0; i < getNbVertices(); i++) {
+			for (int j = 0; j < getNbVertices(); j++) {
+				if (matriceChemin[i][j] != null
+						&& minCout > matriceChemin[i][j].getCout()) {
+					minCout = (int) Math.ceil(matriceChemin[i][j].getCout());
+				}
+			}
+		}
+		return minCout;
+	}
+
+	@Override
+	public int getNbVertices() {
+		return feuilleDeRoute.getNombreLivraisons() + 1;
+	}
+
+	@Override
+	public int[][] getCost() {
+		int nb = getNbVertices();
+		int costs[][] = new int[nb][nb];
+		for (int i = 0; i < nb; i++) {
+			for (int j = 0; j < nb; j++) {
+				if (matriceChemin[i][j] != null) {
+					costs[i][j] = (int) Math
+							.ceil(matriceChemin[i][j].getCout());
+				} else {
+					costs[i][j] = Integer.MAX_VALUE;
+				}
+			}
+		}
+
+		return costs;
+	}
+
+	@Override
+	public int[] getSucc(int i) throws ArrayIndexOutOfBoundsException {
+		ArrayList<Integer> L = new ArrayList<>();
+		for (int j = 0; j < getNbVertices(); j++) {
+			if (matriceChemin[i][j] != null) {
+				L.add(j);
+			}
+		}
+
+		int succ[] = new int[L.size()];
+		for (int j = 0; j < L.size(); j++) {
+			succ[j] = L.get(j);
+		}
+
+		return succ;
+	}
+
+	@Override
+	public int getNbSucc(int i) throws ArrayIndexOutOfBoundsException {
+		ArrayList<Integer> L = new ArrayList<>();
+		for (int j = 0; j < getNbVertices(); j++) {
+			if (matriceChemin[i][j] != null) {
+				L.add(j);
+			}
+		}
+		return L.size();
+	}
+
+}

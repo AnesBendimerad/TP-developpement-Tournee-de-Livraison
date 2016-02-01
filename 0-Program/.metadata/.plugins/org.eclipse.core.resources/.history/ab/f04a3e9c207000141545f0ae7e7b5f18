@@ -1,0 +1,6 @@
+package application;
+
+public class Parametres {
+	public static TML=600;
+
+}

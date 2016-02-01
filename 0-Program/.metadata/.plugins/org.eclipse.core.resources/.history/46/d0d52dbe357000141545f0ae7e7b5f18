@@ -1,0 +1,153 @@
+package application;
+
+/**
+ * classe représenant une livraison
+ */
+
+public class Livraison {
+	/**
+	 * Identifiant de la livraison
+	 */
+	private int idLivraision;
+
+	/**
+	 * Heure d'arrive au point de la livraison (mis à jour après le calcul de
+	 * l'itinéraire)
+	 */
+	private Temps heureArrive;
+
+	/**
+	 * Heure de depart du point de la livraison (mis à jour après le calcul de
+	 * l'itinéraire)
+	 */
+	private Temps heureDepart;
+
+	/**
+	 * noeud représenant le point de livraison (du rendez-vous)
+	 */
+	private Noeud noeudLivraison;
+
+	/**
+	 * plage horaire à laquel appartient la livraison
+	 */
+	private PlageHoraire plageHoraire;
+
+	/**
+	 * construit une livraison (sans plageHoraire et sans heures de
+	 * arrivé/depart)
+	 * 
+	 * @param idLivraision
+	 *            Identifiant de la livraison
+	 * @param noeudLivraison
+	 *            noeud représenant le point de livraison (du rendez-vous)
+	 */
+	public Livraison(int idLivraision, Noeud noeudLivraison) {
+		super();
+		this.idLivraision = idLivraision;
+		this.noeudLivraison = noeudLivraison;
+	}
+
+	/**
+	 * 
+	 * @return Heure d'arrive au point de la livraison (si null donc non encore
+	 *         calculée)
+	 */
+	public Temps getHeureArrive() {
+		return heureArrive;
+	}
+
+	public void setHeureArrive(Temps heureArrive) {
+		this.heureArrive = heureArrive;
+		this.heureDepart = new Temps(heureArrive.toString());
+		if (this.heureDepart.getTempsValue() < plageHoraire.getHeureDebut()
+				.getTempsValue()) {
+			this.heureDepart = plageHoraire.getHeureDebut().copy();
+		}
+		this.heureDepart.addTempsSeconde(Parametres.TempsMoyenLivraison);
+
+	}
+
+	/**
+	 * 
+	 * @return Heure de depart au point de la livraison (si null donc non encore
+	 *         calculée)
+	 */
+	public Temps getHeureDepart() {
+		return heureDepart;
+	}
+
+	/**
+	 * 
+	 * @return plage horaire à laquel appartient la livraison
+	 */
+	public PlageHoraire getPlageHoraire() {
+		return plageHoraire;
+	}
+
+	/**
+	 * 
+	 * @param plageHoraire
+	 *            plage horaire à laquel appartient la livraison
+	 */
+	public void setPlageHoraire(PlageHoraire plageHoraire) {
+		this.plageHoraire = plageHoraire;
+	}
+
+	/**
+	 * 
+	 * @return identifiant de livraison
+	 */
+	public int getIdLivraision() {
+		return idLivraision;
+	}
+
+	/**
+	 * 
+	 * @return noeud représenant le point de livraison (du rendez-vous)
+	 */
+	public Noeud getNoeudLivraison() {
+		return noeudLivraison;
+	}
+
+	/**
+	 * 
+	 * @return true si la livraison appartient à ca plage horaire <br/>
+	 * false sinon
+	 */
+	public boolean isInPlage() {
+		if (this.getHeureArrive().getTempsValue() <= this.getPlageHoraire()
+				.getHeureFin().getTempsValue()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param idLivraision identifiant de livraison
+	 */
+	public void setIdLivraision(int idLivraision) {
+		this.idLivraision = idLivraision;
+	}
+
+	@Override
+	public String toString() {
+		String S;
+		if (this.getHeureArrive() == null) {
+			S = "Livraison [idLivraision=" + idLivraision + ", " + ", à "
+					+ noeudLivraison + ", plageHoraire=" + plageHoraire + "]";
+		} else if (isInPlage()) {
+			S = "Livraison [idLivraision (dans le temps)=" + idLivraision
+					+ ", heureArrive=" + heureArrive + ", heureDepart="
+					+ heureDepart + ", à " + noeudLivraison + ", plageHoraire="
+					+ plageHoraire + "]";
+		} else {
+			S = "Livraison [idLivraision (en retard !)=" + idLivraision
+					+ ", heureArrive=" + heureArrive + ", heureDepart="
+					+ heureDepart + ", à " + noeudLivraison + ", plageHoraire="
+					+ plageHoraire + "]";
+		}
+		return S;
+	}
+
+}

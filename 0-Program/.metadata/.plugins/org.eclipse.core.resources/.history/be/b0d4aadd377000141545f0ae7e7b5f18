@@ -1,0 +1,91 @@
+package application;
+
+import java.util.ArrayList;
+
+/**
+ * classe représentant une plage horaire, elle contient aussi la liste des
+ * livraisons prévues durant cette plage
+ * 
+ * @author H4102
+ */
+public class PlageHoraire {
+
+	/**
+     * heure debut de la plage
+     */
+	private Temps heureDebut;
+
+	/**
+     * heure fin de la plage
+     */
+	private Temps heureFin;
+
+	/**
+     * liste des livraisons prévues durant cette plage 
+     */
+	private ArrayList<Livraison> listeLivraisons;
+
+	/**
+	 * construit une plage horaire avec une liste de livraison vide
+	 * @param heureDebut heure debut de la plage
+	 * @param heureFin heure fin de la plage
+	 */
+	public PlageHoraire(Temps heureDebut, Temps heureFin) {
+		super();
+		this.heureDebut = heureDebut;
+		this.heureFin = heureFin;
+		this.listeLivraisons = new ArrayList<>();
+	}
+
+	/**
+	 * 
+	 * @return heure debut de la plage
+	 */
+	public Temps getHeureDebut() {
+		return heureDebut;
+	}
+
+	/**
+	 * 
+	 * @return heure fin de la plage
+	 */
+	public Temps getHeureFin() {
+		return heureFin;
+	}
+
+	/**
+	 * 
+	 * @return liste des livraisons prévues pour cette plage
+	 */
+	public ArrayList<Livraison> getListeLivraisons() {
+		return listeLivraisons;
+	}
+
+	/**
+	 * Ajoute la livraison dans la liste, et modifie l'objet livraison 
+	 * @param livraison livraison prévu pour cette plage
+	 */
+	public void addLivraison(Livraison livraison) {
+		livraison.setPlageHoraire(this);
+		this.getListeLivraisons().add(livraison);
+	}
+
+	public int getNombreLivraisons() {
+		return listeLivraisons.size();
+	}
+
+	public Livraison getLivraisonDeNoeud(Noeud noeud) {
+		for (Livraison L : this.getListeLivraisons()) {
+			if (L.getNoeudLivraison() == noeud)
+				return L;
+		}
+		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "PlageHoraire [heureDebut=" + heureDebut + ", heureFin="
+				+ heureFin + "]";
+	}
+
+}

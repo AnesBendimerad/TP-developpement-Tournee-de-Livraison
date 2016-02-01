@@ -1,0 +1,59 @@
+package application;
+
+import java.util.ArrayList;
+
+public class Chemin {
+	private Noeud depart;
+	private Noeud destination;
+	private double cout;
+	private ArrayList<Troncon> listeTroncons;
+	
+	public Noeud getDepart() {
+		return depart;
+	}
+	public Noeud getDestination() {
+		return destination;
+	}
+	public double getCout() {
+		return cout;
+	}
+	
+	
+	
+	public void setCout(double cout) {
+		this.cout = cout;
+	}
+	public ArrayList<Troncon> getListeTroncon() {
+		return listeTroncons;
+	}
+	
+	
+	
+	public void setListeTroncon(ArrayList<Troncon> listeTroncon) {
+		this.listeTroncons = listeTroncon;
+	}
+	
+	
+	//Constructeur de chemin (le plus court chemin en temps entre deux noeuds)
+	public Chemin(Noeud depart, Noeud destination,double cout) {
+		super();
+		this.depart = depart;
+		this.destination = destination;
+		this.listeTroncons = new ArrayList<>();
+		this.cout=cout;
+	}
+	@Override
+	public String toString() {
+		String S="\tChemin [depart=" + depart + ", destination=" + destination
+				+ ", Duree=" + Math.ceil(cout)+ "]\n";
+		for (Troncon troncon : this.getListeTroncon()) {
+			
+		}
+		return S;
+		
+	}
+	
+	
+	
+	
+}

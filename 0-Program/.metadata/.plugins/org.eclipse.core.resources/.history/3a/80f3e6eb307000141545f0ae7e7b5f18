@@ -1,0 +1,101 @@
+package application;
+
+import java.util.ArrayList;
+
+/**
+ * Le chemin est identifié par le noeud de départ, le noeud d'arrivée, le cout
+ * (le temps nécessaire en seconde pour le parcourir) et la liste des tronçons
+ * le composant
+ * 
+ * @author H4102
+ *
+ */
+public class Chemin {
+	/**
+	 * noeud depart du chemin
+	 */
+	private Noeud depart;
+	
+	/**
+	 * noeud destination du chemin
+	 */
+	private Noeud destination;
+	
+	/**
+	 * le cout du chemin (durée nécessaire pour parcourir le chemin en seconde)
+	 */
+	private double cout;
+	
+	/**
+	 * la liste des tronçons composant le chemin
+	 */
+	private ArrayList<Troncon> listeTroncons;
+
+	/**
+	 * Construit un chemin avec le noeud de depart, d'arrivé et le cout en temps (en seconde),
+	 * la liste des tronçon est initialement vide (finalisée par Djikstra)   
+	 * @param depart : noeud de départ du chemin
+	 * @param destination : noeud destination du chemin
+	 * @param cout : durée nécessaire pour parcourir le chemin (en seconde)
+	 */
+	public Chemin(Noeud depart, Noeud destination, double cout) {
+		super();
+		this.depart = depart;
+		this.destination = destination;
+		this.listeTroncons = new ArrayList<>();
+		this.cout = cout;
+	}
+
+	/**
+	 * 
+	 * @return noeud depart du chemin
+	 */
+	public Noeud getDepart() {
+		return depart;
+	}
+
+	/**
+	 * 
+	 * @return noeud destination du chemin
+	 */
+	public Noeud getDestination() {
+		return destination;
+	}
+
+	/**
+	 * 
+	 * @return le cout du chemin (durée nécessaire pour parcourir le chemin en seconde)
+	 */
+	public double getCout() {
+		return cout;
+	}
+
+	/**
+	 * 
+	 * @return la liste des tronçons composant le chemin
+	 */
+	public ArrayList<Troncon> getListeTroncon() {
+		return listeTroncons;
+	}
+	
+	
+	/**
+	 * 
+	 * @param listeTroncons :  
+	 */
+	public void setListeTroncons(ArrayList<Troncon> listeTroncons) {
+		this.listeTroncons = listeTroncons;
+	}
+
+	@Override
+	public String toString() {
+		String S = "Chemin [depart=" + depart + ", destination=" + destination
+				+ ", Duree=" + Math.ceil(cout) + "]\r\n";
+		for (Troncon troncon : this.getListeTroncon()) {
+			S += "\t\t" + troncon.toString() + "\r\n";
+		}
+		return S;
+
+	}
+
+}

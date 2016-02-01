@@ -1,0 +1,33 @@
+package application;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Zone {
+	private String nomFichier;
+	private HashMap<Integer, Noeud> cache = new HashMap<>();
+	
+	private ArrayList<Troncon> listeTroncons;
+	
+	
+	
+	
+	public Zone(String nomFichier) {
+		super();
+		this.nomFichier = nomFichier;
+		listeNoeuds=new ArrayList<>();
+		listeTroncons=new ArrayList<>();
+	}
+	
+	
+	public String getNomFichier() {
+		return nomFichier;
+	}
+	
+	public ArrayList<Troncon> getListeTroncons() {
+		return listeTroncons;
+	}
+	
+	
+
+}
